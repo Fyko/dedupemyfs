@@ -124,19 +124,6 @@ void traverse_directory(const char *dir_path, hash_entry_t **hash_table) {
     closedir(dir);
 }
 
-void free_hash_table(hash_entry_t *hash_table) {
-    hash_entry_t *hash_entry, *tmp;
-    HASH_ITER(hh, hash_table, hash_entry, tmp) {
-        filename_t *filename_entry, *tmp_filename;
-        HASH_ITER(hh, hash_entry->filenames, filename_entry, tmp_filename) {
-            HASH_DEL(hash_entry->filenames, filename_entry);
-            free(filename_entry);
-        }
-        HASH_DEL(hash_table, hash_entry);
-        free(hash_entry);
-    }
-}
-
 int main(int argc, char *argv[]) {
     char cwd[PATH_MAX];
     const char *start_path = (argc > 1) ? argv[1] : ".";
@@ -176,8 +163,6 @@ int main(int argc, char *argv[]) {
             printf("\n");
         }
     }
-
-    free_hash_table(hash_table);
 
     return 0;
 }
